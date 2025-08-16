@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IoMdAddCircleOutline } from "react-icons/io";
 function AddTodo({ onNewItem }) {
   const [ todoName, setTodoName ] = useState("");
   const [ dueDate, setDueDate ] = useState("");
@@ -33,7 +34,7 @@ function AddTodo({ onNewItem }) {
             class="btn btn-success"
             onClick={handleAddButtonClicked}
           >
-            Add
+            <IoMdAddCircleOutline />
           </button>
         </div>
       </div>
