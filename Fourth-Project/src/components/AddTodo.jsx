@@ -1,43 +1,41 @@
-import { useState } from "react";
+import {useRef } from "react";
+import { useContext } from "react";
+import { TodoItemsContext } from "../store/Todo-items-store";
 import { IoMdAddCircleOutline } from "react-icons/io";
-function AddTodo({ onNewItem }) {
-  const [ todoName, setTodoName ] = useState("");
-  const [ dueDate, setDueDate ] = useState("");
-  const handleNameChange = (event) => {
-    setTodoName(event.target.value);
-  };
-  const handleDateChange = (event) => {
-    setDueDate(event.target.value);
-  };
-  const handleAddButtonClicked = () => {
-    onNewItem(todoName, dueDate);
-    setDueDate("");
-    setTodoName("");
+function AddTodo() {
+  const {addNewItem}=useContext(TodoItemsContext);
+  const todoNameElement=useRef(0)
+  const dueDateElement=useRef(0)
+  const handleAddButtonClicked = (event) => {
+    event.preventDefault();
+    const todoName=todoNameElement.current.value;
+    const dueDate=dueDateElement.current.value;
+    todoNameElement.current.value="";
+    dueDateElement.current.value="";
+    addNewItem(todoName, dueDate);                                                   
   };
   return (
     <div class="container text-center">
-      <div class="row kg-row">
+      <form className="row kg-row" onSubmit={handleAddButtonClicked}>
         <div class="col-6">
           <input
             type="text"
+            ref={todoNameElement}
             placeholder="Enter TODO here"
-            value={todoName}
-            onChange={handleNameChange}
           />
         </div>
         <div class="col-4">
-          <input type="date" value={dueDate} onChange={handleDateChange} />
+          <input type="date" ref={dueDateElement} />
         </div>
         <div class="col-2">
           <button
-            type="button"
-            class="btn btn-success"
-            onClick={handleAddButtonClicked}
+            type="submit"
+            className="btn btn-success"
           >
             <IoMdAddCircleOutline />
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

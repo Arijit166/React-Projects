@@ -1,27 +1,39 @@
 import AddTodo from "./components/AddTodo.jsx";
 import AppName from "./components/AppName.jsx";
 import Items from "./components/Items.jsx";
-import WelcomeMessage from "./components/WelcomeMessage.jsx"; 
+import WelcomeMessage from "./components/WelcomeMessage.jsx";
 import { useState } from "react";
-import './App.css';
+import { TodoItemsContext } from "./store/Todo-items-store.jsx";
+import "./App.css";
 function App() {
-   const initialTodoItems=[];
-  const [todoItems,settodoItems]=useState(initialTodoItems)
-  const handleNewItem = (itemName,itemDueDate)=>{
-      const newTodoItems=[...todoItems,{name:itemName,dueDate:itemDueDate}];
-      settodoItems(newTodoItems)
-  }
-  const handleDeleteItem=(todoItemName)=>{
-    const newTodoItems=todoItems.filter(item=>item.name!==todoItemName)
+  const initialTodoItems = [];
+  const [todoItems, settodoItems] = useState(initialTodoItems);
+  const addNewItem = (itemName, itemDueDate) => {
+    const newTodoItems = [
+      ...todoItems,
+      { name: itemName, dueDate: itemDueDate },
+    ];
     settodoItems(newTodoItems);
-  }
+  };
+  const deleteItem = (todoItemName) => {
+    const newTodoItems = todoItems.filter((item) => item.name !== todoItemName);
+    settodoItems(newTodoItems);
+  };
   return (
-    <center className="todo-container">
-      <AppName />
-      <AddTodo onNewItem={handleNewItem}/>
-      {todoItems.length===0 && <WelcomeMessage />}
-      <Items todoItems={todoItems}  onDeleteClick={handleDeleteItem}/>
-    </center>
+    <TodoItemsContext.Provider
+      value={{
+        todoItems,
+        addNewItem,
+        deleteItem,
+      }}
+    >
+      <center className="todo-container">
+        <AppName />
+        <AddTodo />
+        <WelcomeMessage />
+        <Items />
+      </center>
+    </TodoItemsContext.Provider>
   );
 }
 export default App;
